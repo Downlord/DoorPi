@@ -1,0 +1,2 @@
+#!/bin/bash
+curl -s -k "http://door:pi@192.168.1.137/control/trigger_event?event_name=OnKeyPressed_prodsystem.11&event_source=doorpi.keyboard.from_gpio" &

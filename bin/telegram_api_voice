@@ -1,0 +1,5 @@
+#!/bin/bash
+export REC=$(ls -1tr /usr/local/etc/DoorPi/records/*.wav |tail -1)
+	/usr/bin/oggenc "$REC" "${REC/.wav/.ogg}" >>/dev/null 2>&1;
+curl -s -o /dev/null -k "https://api.telegram.org//sendVoice" -F voice="@${REC/.wav/.ogg}" -F chat_id= -F caption="$1"
+rm "$REC" "${REC/.wav/.ogg}"

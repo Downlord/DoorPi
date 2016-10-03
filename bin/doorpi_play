@@ -1,0 +1,3 @@
+#!/bin/bash
+
+aplay -D default:CARD=Device "$*" &

@@ -1,0 +1,2 @@
+#!/bin/bash
+$(wget -q -O /tmp/doorcam.jpg "http://ehome/dc/cam_sm.jpg" ; curl -s -o /dev/null -k "https://api.telegram.org//sendPhoto" -F photo="@/tmp/doorcam.jpg" -F chat_id= -F caption="$*") &

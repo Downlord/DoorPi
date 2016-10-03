@@ -1,0 +1,2 @@
+#!/bin/bash
+curl -s -k "https://api.telegram.org//setWebHook" -F url="https://www.laurisch.net/dc/" -F chat_id=

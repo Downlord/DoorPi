@@ -1,0 +1,3 @@
+#!/bin/bash
+pico2wave -l=de-DE -w=/tmp/test.wav "$*"
+$( aplay /tmp/test.wav >>/dev/null 2>&1 && rm /tmp/test.wav) &

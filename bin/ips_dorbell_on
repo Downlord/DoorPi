@@ -1,0 +1,2 @@
+#!/bin/bash
+curl -m 3 'http://ehome/rem.php?c=s&v=55041&d=true' &

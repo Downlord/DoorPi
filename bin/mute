@@ -1,0 +1,4 @@
+#!/bin/bash
+/usr/bin/amixer -c 1 cset numid=5,iface=MIXER,name='Speaker Playback Switch' 0
+
+

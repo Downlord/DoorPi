@@ -1,0 +1,3 @@
+#!/bin/bash
+DATE=$(date '+[%T]')
+curl -s -k -o /dev/null "https://api.telegram.org//sendMessage" -d text="$DATE $1" -d parse_mode=html -d chat_id= -d disable_notification=1 $* &

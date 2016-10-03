@@ -1,0 +1,151 @@
+[DoorPi]
+Base_path = /usr/local/etc/DoorPi
+eventlog = !BASEPATH!/conf/eventlog.db
+is_alive_led = 
+last_snapshot = 
+;trace = TRACE
+;log = /var/log/doorpi/
+;log_level=DEBUG
+;TRACE_LEVEL = 5
+
+[DoorPiWeb]
+indexfile = index.html
+ip = 
+loginfile = login.html
+online_fallback = http://motom001.github.io/DoorPiWeb
+port = 80
+public = AREA_public
+www = !BASEPATH!/../DoorPiWeb
+
+
+[SIP-Phone]
+firewallpolicy = PolicyNoFirewall
+audio_codecs = PCMA,PCMU
+call_timeout = 20
+capture_device = ALSA: USB PnP Sound Device
+dialtone = !BASEPATH!/media/bitte_warten.wav
+dialtone_renew_every_start = False
+dialtone_volume = 25
+echo_cancellation_enabled = True
+identity = DoorPi-TS
+local_port = 5060
+max_call_time = 120
+playback_device = ALSA: USB PnP Sound Device
+record_while_dialing = False
+records = !BASEPATH!/records/%Y-%m-%d_%H-%M-%S.wav
+sipphonetyp = linphone
+sipserver_realm = fritz.box
+sipserver_server = 192.168.1.1
+;sipserver_username = 623
+;sipserver_password = 623
+sipserver_username = 621
+sipserver_password = 621
+stun_server = 
+ua.max_calls = 2
+video_codecs = VP8
+video_device = StaticImage: Static picture
+video_display_enabled = False
+video_size = vga
+
+[Group]
+administrators= admin, doorpi ,door,pi
+
+[WritePermission]
+administrator = installer.dashboard,config
+
+[ReadPermission]
+guests = dashboard
+
+[keyboards]
+prodsystem = gpio
+;webservice = filesystem
+;
+;
+;[webservice_keyboard]
+;base_path_input = /usr/local/etc/DoorPI/keyboard/inputs/
+;base_path_output = /usr/local/etc/DoorPI/keyboard/outputs/
+;
+;[webservice_InputPins]
+;klingel = os_execute:/usr/local/etc/DoorPi/scripts/DoorbellPushMessage.sh
+;anwesend =os_execute:echo **777 > !BASEPATH!/callTarget.txt
+;abwesend =os_execute:echo 01511234567> !BASEPATH!/callTarget.txt
+;makecall = file_call_value:!BASEPATH!/callTarget.txt
+
+[prodsystem_keyboard]
+bouncetime = 500
+polarity = 1
+;;	0: VCC am Eingang ist HIGH level
+;; 	1: VCC am Eingang ist LOW level
+pull_up_down = PUD_UP
+;;	PUD_DOWN / PUD_UP / PUD_OFF
+mode = BOARD
+;;	BOARD / BCM
+pressed_on_keydown = True
+
+[prodsystem_InputPins]
+11 = sleep:0
+
+[prodsystem_OutputPins]
+8 = Blink LED
+
+[EVENT_OnStartup]
+10 = sleep:5
+20 = os_execute:/usr/local/bin/telegram_api "DoorPi ist nun online" 
+
+;[EVENT_OnCallStateDisconnect]
+;10 = os_execute:/usr/local/bin/telegram_api "EVENT_OnCallStateDisconnect"
+
+[EVENT_OnKeyPressed_prodsystem.11]
+10 = os_execute:/usr/local/bin/doorpi_play !BASEPATH!/media/TwoTone.wav
+;10 = os_execute:/usr/local/bin/telegram_api "calling phone"
+15 = call:**620#622#624#625
+20 = os_execute:/usr/local/bin/telegram_api_doorcam_img "Es klingelt an der Tuer"
+30 = os_execute:/usr/local/bin/ips_dorbell_on
+
+[EVENT_OnRecorderStopped]
+10 = os_execute:/usr/local/bin/telegram_api_voice "Eine neue DoorPi SPRACHNACHRICHT"
+
+[EVENT_OnSipPhoneCallTimeoutNoResponse]
+10 = os_execute:/usr/local/bin/telegram_api "DoorPi Besuch in Abwesenheit"
+20 = call:**606
+30 = hangup:15
+40 = sleep:3
+50 = os_execute:/usr/local/bin/doorpi_play !BASEPATH!/media/wiedersehen.wav
+60 = sleep:3
+70 = os_execute:/usr/local/bin/telegram_api_voice "Eine neue DoorPi SPRACHNACHRICHT"
+80 = sleep:5
+
+[EVENT_OnTimeSecondEvenNumber]
+10=statuswatchdog:/run/doorpi.watchdog.log
+
+[DTMF]
+"#" = os_execute:/usr/local/bin/open_door
+"*" = os_execute:/usr/local/bin/light
+
+[IP-Symcon]
+server = http://192.168.1.181:80/api/
+username = XXXXXXXXX
+password = XXXXXXXXX
+jsonrpc = 2.0
+
+[SMTP]
+server = send.one.com
+port = 2525
+use_tls = false
+use_ssl = false
+need_login = true
+username = XXXXXXXXX
+password = XXXXXXXXX
+from = XXXXXXXXX
+
+[DTMF]
+;"**7378278*" = restart
+;"**732668*" = reboot
+
+[AdminNumbers]
+
+**610 = active
+**620 = active
+**622 = active
+**624 = active
+**625 = active
